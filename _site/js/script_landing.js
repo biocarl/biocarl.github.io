@@ -13,6 +13,7 @@ if (event.ctrlKey==true && (event.which == '61' || event.which == '107' || event
      }
   });
 
+
 /*
 //Disable scroll
 $(window).bind('mousewheel DOMMouseScroll', function (event) {
@@ -131,10 +132,10 @@ function clickme1(){
     //welcome message
     loadContent("content2","welcome");
     show("content2");
-    //Welcome fun fact
-    loadContent("content1","funfact");
-    show("content1");
-    beLife();
+    //Welcome fun fact(wuhua!
+    //loadContent("content1","funfact");
+    //show("content1");
+    //beLife();
 }
 
 function artist1(){

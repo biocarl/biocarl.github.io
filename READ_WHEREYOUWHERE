@@ -1,0 +1,51 @@
+biocarl.github.io -> Jekyll-Installation
+carlhauck.de -> new php version
+WebsiteCV -> old version with plain html -> use this to make your site!
+Run jekyll serve for server and packaging
+or ran XAMPP for seeing your WebsiteCV (under:: http://localhost/JEKYLL/WebsiteCV/ )
+svgs are stored in the includes
+
+
+
+//where you where:
+
+under /biocarl is a file test.html, when you call localhost/test you can see it unde jekyll
+
+First(!): Use Cloudflare as CMS! : https://www.cloudflare.com -> https://www.namecheap.com/support/knowledgebase/article.aspx/9607/2210/how-to-set-up-dns-records-for-your-domain-in-cloudflare-account
+------ https://blog.cloudflare.com/secure-and-fast-github-pages-with-cloudflare/
+------ https://www.cloudflare.com/a/overview/carlhauck.de
+------ https://www.cloudflare.com/a/overview/carlhauck.de
+
+
+------ https://www.cloudflare.com/a/overview/carlhauck.de
+First: delete all external dependencies and save them on github, faster(!)
+
+Second: Repair it and think to which degree integrate it in Jekyll (layouts,includes etc.)
+
+Third: But the paths to the rest of the jekyll (blog etc.)
+
+Fourth: Make same design for Blog
+
+Fith: Optimize your page!
+	>omg svg > minimize
+	>https://chrishallahan.com/blog/pass-google-pagespeed-performance-test
+
+
+Last: Install Google Analyitics
+	>https://diywpblog.com/leverage-browser-cache-optimize-google-analytics/
+	>https://github.com/blog/2162-better-discoverability-for-github-pages-sites	
+	>https://chrishallahan.com/blog/pass-google-pagespeed-performance-test
+
+
+
+//For later optimization: 
+https://www.algolia.com/ (Step 8: https://wiredcraft.com/blog/make-jekyll-fast/)
+
+Doku-SVG's
+
+- use plain SVG->Make changes
+- Use animation-website
+- add general class to svg: scaleSVG and hide
+- add classes to clickable elements
+- make hidden things(?)
+

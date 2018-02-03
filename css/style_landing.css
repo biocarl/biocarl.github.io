@@ -1,6 +1,7 @@
 body, html {
   height:100%;
-  /*background-color:   #3399FF;*/
+  margin: 0;
+  /*overflow: hidden*/
 }
 
 /*general prefs*/
@@ -265,3 +266,21 @@ TODO Add the animation part
   content: "\A";
   white-space: pre;
 }
+
+
+
+/*Responsive Things*/
+
+@media only screen and (max-width: 1316px) {
+    .timon-logo {
+        margin-bottom: -5px !important;
+        display: block;
+        margin: auto;
+        height:200px;
+        width:300px;
+    }
+    #slogan_ID{
+        display: none;
+    }
+}
+
