@@ -78,7 +78,6 @@ function makeButton(id){
   //Getting dims
   var  group = document.getElementById(id);
   var bbox = group.getBBox();
-
   //creating clickable rectangle
   var  rect = document.createElementNS(svgns, "rect");
   rect.setAttribute("x",  bbox.x);
