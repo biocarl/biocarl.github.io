@@ -22,18 +22,6 @@ $(window).bind('mousewheel DOMMouseScroll', function (event) {
 });
 */
 
-function myFunction() {
-    document.getElementById("demo").innerHTML = "YOU CLICKED ME!";
-
-    //Delete svg element
-    var style = document.getElementById("solid1").style.display;
-    if(style === "none")
-   document.getElementById("solid1").style.display = "block";
- else
-   document.getElementById("solid1").style.display = "none";
-
-}
-
 //Helperfunctions
 //Loads and removes elements from canvas
 function rm(id){
@@ -139,7 +127,6 @@ function clickme1(){
     //Start rest of animation
     show("animation1");
     //TODO Add here an animation, since the main animation takes so long
-    document.getElementById("demo").innerHTML = "Backround?";
     setTimeout(function(){ document.getElementById("loaderWelcome").style.display = "none"}, 2200);
     //welcome message
     loadContent("content2","welcome");
@@ -151,8 +138,6 @@ function clickme1(){
 }
 
 function artist1(){
-  //LOG
-  document.getElementById("demo").innerHTML = "artist clicked me";
   //Create visual click response
   acirc.style.stroke="blue";
   bcirc.style.stroke="red";
