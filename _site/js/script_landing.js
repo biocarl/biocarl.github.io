@@ -126,11 +126,18 @@ function clickme1(){
     rm("clickme1");
     //Start rest of animation
     show("animation1");
+
+
+
     //TODO Add here an animation, since the main animation takes so long
     setTimeout(function(){ document.getElementById("loaderWelcome").style.display = "none"}, 2200);
     //welcome message
     loadContent("content2","welcome");
     show("content2");
+    
+    //smooth slowly to content (mobile)
+    var pos = $("#content2").offset().top;
+    $('body, html').animate({scrollTop: pos},5000);
     //Welcome fun fact(wuhua!
     //loadContent("content1","funfact");
     //show("content1");

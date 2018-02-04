@@ -279,9 +279,10 @@ position:relative !important;
 height:100%;
 }
 #loaderWelcome{
-position:fixed;
+/*position:fixed;
 bottom:0px;
 width:100%;
+*/
 }
 
 }
