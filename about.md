@@ -1,16 +1,15 @@
 ---
 layout: page
 title: About
+order: 3
 permalink: /about/
 ---
-WHYY=
 
-This is the base Jekyll theme. You can find out more info about customizing your Jekyll theme, as well as basic Jekyll usage documentation at [jekyllrb.com](http://jekyllrb.com/)
 
-You can find the source code for the Jekyll new theme at:
-{% include icon-github.html username="jglovier" %} /
-[jekyll-new](https://github.com/jglovier/jekyll-new)
-
-You can find the source code for Jekyll at
-{% include icon-github.html username="jekyll" %} /
-[jekyll](https://github.com/jekyll/jekyll)
+##Welcome! 
+Welcome to my first website which will serve as a small introduction of my persona!
+I recently started with web development, so I'm learning a lot of new stuff every day.
+This website will be playground and exposé at the same time. If you are interested in having a similar website or have any questions about the implementation, drop me an  <a href="mailto:carlhauck@t-online.de"> email</a> :-)
+Want to connect?
+Hit me on
+<a target="_blank" href="https://www.linkedin.com/in/carl-hauck-007706142/">LinkedIn</a>, <a target="_blank" href="https://github.com/biocarl">Github</a> or even <a target="_blank" href="https://twitter.com/carl_hauck">Twitter</a>!

@@ -2,12 +2,12 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Carl Hauck</title>
-    <description>Write an awesome description for your new site here. You can edit this line in _config.yml. It will appear in your document head meta (for Google search results) and in your feed.xml site description.
+    <description>Welcome! This is my personal site and will be playground and exposé at the same time. 
 </description>
-    <link>http://yourdomain.com/</link>
-    <atom:link href="http://yourdomain.com/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Sat, 03 Feb 2018 21:43:19 -0300</pubDate>
-    <lastBuildDate>Sat, 03 Feb 2018 21:43:19 -0300</lastBuildDate>
+    <link>https://www.carlhauck.de/</link>
+    <atom:link href="https://www.carlhauck.de/feed.xml" rel="self" type="application/rss+xml"/>
+    <pubDate>Sun, 04 Feb 2018 20:37:23 -0300</pubDate>
+    <lastBuildDate>Sun, 04 Feb 2018 20:37:23 -0300</lastBuildDate>
     <generator>Jekyll v3.0.1</generator>
     
       <item>
@@ -28,8 +28,8 @@
 
 </description>
         <pubDate>Mon, 29 Jan 2018 17:29:40 -0300</pubDate>
-        <link>http://yourdomain.com/jekyll/update/2018/01/29/another-post.html</link>
-        <guid isPermaLink="true">http://yourdomain.com/jekyll/update/2018/01/29/another-post.html</guid>
+        <link>https://www.carlhauck.de/jekyll/update/2018/01/29/another-post.html</link>
+        <guid isPermaLink="true">https://www.carlhauck.de/jekyll/update/2018/01/29/another-post.html</guid>
         
         
         <category>jekyll</category>
@@ -56,8 +56,8 @@
 
 </description>
         <pubDate>Sun, 28 Jan 2018 17:29:40 -0300</pubDate>
-        <link>http://yourdomain.com/jekyll/update/2018/01/28/welcome-to-jekyll.html</link>
-        <guid isPermaLink="true">http://yourdomain.com/jekyll/update/2018/01/28/welcome-to-jekyll.html</guid>
+        <link>https://www.carlhauck.de/jekyll/update/2018/01/28/welcome-to-jekyll.html</link>
+        <guid isPermaLink="true">https://www.carlhauck.de/jekyll/update/2018/01/28/welcome-to-jekyll.html</guid>
         
         
         <category>jekyll</category>

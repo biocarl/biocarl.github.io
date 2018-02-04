@@ -16,15 +16,23 @@ First(!): Use Cloudflare as CMS! : https://www.cloudflare.com -> https://www.nam
 ------ https://www.cloudflare.com/a/overview/carlhauck.de
 ------ https://www.cloudflare.com/a/overview/carlhauck.de
 
-
 ------ https://www.cloudflare.com/a/overview/carlhauck.de
+
+
+
+>>>>>>>>1.Try to remove long loading times
+>>>>>>>>2. *m* Welcome message and tree should be relative (not overlapping)
+>>>>>>>>3. Do a smooth scroll up
+
+3. when you click dev or artist, bullet points will appear what internship you've already did,and skillset (quick motion)
 First: delete all external dependencies and save them on github, faster(!)
 
-Second: Repair it and think to which degree integrate it in Jekyll (layouts,includes etc.)
+>>>>>>>Second: Repair it and think to which degree integrate it in Jekyll (layouts,includes etc.)
+>>>>>>>>	- blue and green are the main colors
 
-Third: But the paths to the rest of the jekyll (blog etc.)
+>>>>>>>>Third: But the paths to the rest of the jekyll (blog etc.)
 
-Fourth: Make same design for Blog
+>>>>>>>>>>Fourth: Make same design for Blog
 
 Fith: Optimize your page!
 	>omg svg > minimize

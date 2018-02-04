@@ -6,6 +6,8 @@ document.body.style.msTransform =   scale;       // IE 9
 document.body.style.transform = scale;     // General
 document.body.style.zoom = 1.0
 
+
+
 //Disable zoom
 $(document).keydown(function(event) {
 if (event.ctrlKey==true && (event.which == '61' || event.which == '107' || event.which == '173' || event.which == '109'  || event.which == '187'  || event.which == '189'  ) ) {
@@ -122,23 +124,38 @@ function beLife() {
 
 //SVG listeners: Will be called when on element is clicked, function has the same name as the element id
 function clickme1(){
+
+    //welcome message
+    loadContent("content2","welcome");
+    show("content2");
+
+	//only for the mobile version
+    const mq = window.matchMedia("(max-width: 480px)");
+    if(mq.matches){
+    //scroll to bottom in order to compensate the scroll up from the newly created content.
+    window.scrollTo(0,document.body.scrollHeight);
+    //scroll to top
+    $('body,html').animate({ scrollTop: 0 }, 6000);
+	}
+
     //remove click button
     rm("clickme1");
     //Start rest of animation
     show("animation1");
 
-
-
     //TODO Add here an animation, since the main animation takes so long
-    setTimeout(function(){ document.getElementById("loaderWelcome").style.display = "none"}, 2200);
-    //welcome message
-    loadContent("content2","welcome");
-    show("content2");
-    
+    //setTimeout(function(){ document.getElementById("loaderWelcome").style.display = "none"}, 2200);
+
+        /*
+    setTimeout(function(){ 
+    $('body,html').animate({ scrollTop: 0 }, 5000)}
+     , 2200);
+
     //smooth slowly to content (mobile)
     var pos = $("#content2").offset().top;
     $('body, html').animate({scrollTop: pos},5000);
-    //Welcome fun fact(wuhua!
+*/
+   //Welcome fun fact(wuhua!
     //loadContent("content1","funfact");
     //show("content1");
     //beLife();
@@ -198,4 +215,8 @@ function bioinformatician1(){
 //This is loaded when webpage is displayed
 $(document).ready(function(){
   show("menue");
+    const mq = window.matchMedia("(max-width: 480px)");
+    if(mq.matches){
+  window.scrollTo(0,document.body.scrollHeight);
+  }
 }); //End document.ready

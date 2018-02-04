@@ -2,10 +2,12 @@
  * Site header
  */
 .site-header {
-    border-top: 5px solid $grey-color-dark;
-    border-bottom: 1px solid $grey-color-light;
-    min-height: 56px;
-
+	//me
+    //border-top: 5px solid $grey-color-dark;
+    //border-bottom: 1px solid $grey-color-light;
+	//background-color: #0B72D9;
+	background-color: $primary-color;
+	height: 10vh;
     // Positioning context for the mobile navigation icon
     position: relative;
 }
@@ -24,72 +26,25 @@
     }
 }
 
-.site-nav {
-    float: right;
-    line-height: 56px;
 
+.site-nav {
+    line-height: 66px;
+    text-align: center;
     .menu-icon {
         display: none;
     }
 
     .page-link {
         color: $text-color;
-        line-height: $base-line-height;
-
+        font-size: $header-font-size;
+	font-weight: bold;
+	display: inline-block; 
         // Gaps between nav items, but not on the last one
         &:not(:last-child) {
             margin-right: 20px;
         }
     }
 
-    @include media-query($on-palm) {
-        position: absolute;
-        top: 9px;
-        right: $spacing-unit / 2;
-        background-color: $background-color;
-        border: 1px solid $grey-color-light;
-        border-radius: 5px;
-        text-align: right;
-
-        .menu-icon {
-            display: block;
-            float: right;
-            width: 36px;
-            height: 26px;
-            line-height: 0;
-            padding-top: 10px;
-            text-align: center;
-
-            > svg {
-                width: 18px;
-                height: 15px;
-
-                path {
-                    fill: $grey-color-dark;
-                }
-            }
-        }
-
-        .trigger {
-            clear: both;
-            display: none;
-        }
-
-        &:hover .trigger {
-            display: block;
-            padding-bottom: 5px;
-        }
-
-        .page-link {
-            display: block;
-            padding: 5px 10px;
-
-            &:not(:last-child) {
-                margin-right: 0;
-            }
-            margin-left: 20px;
-        }
-    }
 }
 
 
@@ -167,8 +122,13 @@
 /**
  * Page content
  */
+.page-content-full {
+	height: 90vh;
+
+}
+
 .page-content {
-    padding: $spacing-unit 0;
+    	padding: $spacing-unit 0;
 }
 
 .page-heading {

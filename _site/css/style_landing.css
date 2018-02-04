@@ -1,7 +1,19 @@
 body, html {
 	background-color: #3f51b5;
+	/* For WebKit (Safari, Chrome, etc) */
+background: #3f51b5 -webkit-gradient(linear, left top, left bottom, from(#0B72D9), to(#3f51b5)) no-repeat;
+	    /* Mozilla,Firefox/Gecko */
+background: #3f51b5 -moz-linear-gradient(top, #0B72D9, #3f51b5) no-repeat;
+	    /* IE 5.5 - 7 */
+filter: progid:DXImageTransform.Microsoft.gradient(startColorstr=#0B72D9, endColorstr=#3f51b5) no-repeat;
+	/* IE 8 */
+	-ms-filter: "progid:DXImageTransform.Microsoft.gradient(startColorstr=#0B72D9, endColorstr=#0B72D9)" no-repeat;
+
+
 	height:100%;
-margin: 0;
+	margin: 0;
+	padding-right: 0 !important;
+	padding-left: 0 !important;
 	/*overflow: hidden*/
 }
 
@@ -12,7 +24,7 @@ label{cursor:pointer}
 
 /*Styling the links*/
 a {
-color: #FE4B74;
+/*color: #FE4B74;*/
 }
 
 /*Sections styling*/
@@ -22,19 +34,13 @@ padding: 0 0%;
 display: table;
 margin: 0;
 	max-width: none;
-height: 100vh;
+height: 90vh;
 }
 
 #section1{
-	background-color: #3f51b5;
-	/* For WebKit (Safari, Chrome, etc) */
-background: #3f51b5 -webkit-gradient(linear, left top, left bottom, from(#0B72D9), to(#3f51b5)) no-repeat;
-	    /* Mozilla,Firefox/Gecko */
-background: #3f51b5 -moz-linear-gradient(top, #0B72D9, #3f51b5) no-repeat;
-	    /* IE 5.5 - 7 */
-filter: progid:DXImageTransform.Microsoft.gradient(startColorstr=#0B72D9, endColorstr=#3f51b5) no-repeat;
-	/* IE 8 */
-	-ms-filter: "progid:DXImageTransform.Microsoft.gradient(startColorstr=#0B72D9, endColorstr=#0B72D9)" no-repeat;
+
+
+
 }
 
 #section2{
@@ -64,9 +70,21 @@ margin:0px;
 	padding: 15px ;
 	 font-family: monospace;
 	 font-weight: bold;
+	color: #fff;
 	 /*Toggle this for later, if you can align to row center?*/
 	 min-width : 100% ;
 }
+
+.contentMain a {
+color: #FE4B74 !important;
+}
+
+.contentMain a:visited {
+color: #FE4B74 !important;
+}
+
+
+
 .contentExtra{
 padding: 15px;
 	 border-radius: 25px;
@@ -272,17 +290,52 @@ content: "\A";
 
 #menue_wrapper{
 height:100vh !important;
+order:2 !important;
 }
 
 #menue{
 position:relative !important;
 height:100%;
+margin-top 0;
+
 }
+
+
+#content2_wrapper{
+order:1 !important;
+position:relative !important;
+}
+
 #loaderWelcome{
 /*position:fixed;
 bottom:0px;
 width:100%;
 */
 }
-
 }
+
+
+/*Flying gag**/
+
+@keyframes wiggle {
+    0% { transform: rotate(1deg); }
+    10% { transform: rotate(1deg); }
+    20% { transform: rotate(1deg); }
+    30% { transform: rotate(1deg); }
+    40% { transform: rotate(1deg); }
+    50% { transform: rotate(-1deg); }
+    60% { transform: rotate(-1deg); }
+    70% { transform: rotate(-1deg); }
+    80% { transform: rotate(-1deg); }
+    90% { transform: rotate(-1deg); }
+    100% { transform: rotate(-1deg); }
+}
+div.wiggle {
+  display: inline-block;
+  animation: wiggle 1s infinite;
+}
+
+div.wiggle:hover {
+  animation: none;
+}
+
