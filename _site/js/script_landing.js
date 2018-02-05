@@ -136,7 +136,10 @@ function clickme1(){
     window.scrollTo(0,document.body.scrollHeight);
     //scroll to top
     $('body,html').animate({ scrollTop: 0 }, 6000);
-	}
+    
+    setTimeout(function(){ $("#menue").addClass('blur')}, 3400);
+	
+}
 
     //remove click button
     rm("clickme1");

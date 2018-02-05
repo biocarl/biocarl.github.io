@@ -6,7 +6,6 @@ permalink: /about/
 ---
 
 
-##Welcome! 
 Welcome to my first website which will serve as a small introduction of my persona!
 I recently started with web development, so I'm learning a lot of new stuff every day.
 This website will be playground and exposé at the same time. If you are interested in having a similar website or have any questions about the implementation, drop me an  <a href="mailto:carlhauck@t-online.de"> email</a> :-)
