@@ -7,7 +7,7 @@ permalink: /blog/
 
 <div class="home">
 
-  <h1 class="page-heading" style="font-weight:bold;">My recent blog articles</h1>
+  <h1 class="page-heading" style="font-weight:bold;text-align: center;">My recent blog articles <br> <br> <hr></h1>
 
  <ul class="post-list">
     {% for post in site.posts %}
@@ -21,6 +21,6 @@ permalink: /blog/
     {% endfor %}
   </ul>
 
-  <p class="rss-subscribe">subscribe <a href="{{ "/feed.xml" | prepend: site.baseurl }}">via RSS</a></p>
+  <p style="text-align:center;" class="rss-subscribe">subscribe <a href="{{ "/feed.xml" | prepend: site.baseurl }}">via RSS</a></p>
 
 </div>

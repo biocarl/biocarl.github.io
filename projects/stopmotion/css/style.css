@@ -1,0 +1,47 @@
+body, html {
+  height:100%;
+    overflow:hidden!important;
+  /*background-color:   #3399FF;*/
+}
+
+/*Sections styling*/
+section {
+  width: 100vw;
+  padding: 0 0%;
+  display: table;
+  margin: 0;
+  position: relative;
+  max-width: none;
+  height: 90vh;
+}
+
+#home{
+    /* Center and scale the image nicely */
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-color: #3f51b5;
+    /* For WebKit (Safari, Chrome, etc) */
+    background: #3f51b5 -webkit-gradient(linear, left top, left bottom, from(#0B72D9), to(#3f51b5)) no-repeat;
+    /* Mozilla,Firefox/Gecko */
+    background: #3f51b5 -moz-linear-gradient(top, #0B72D9, #3f51b5) no-repeat;
+    /* IE 5.5 - 7 */
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr=#0B72D9, endColorstr=#3f51b5) no-repeat;
+    /* IE 8 */
+    -ms-filter: "progid:DXImageTransform.Microsoft.gradient(startColorstr=#0B72D9, endColorstr=#0B72D9)" no-repeat;
+}
+
+/*The default for all svg-Elements*/
+.hide{
+    display: none;
+}
+
+/* For Scaling the SVG inline files to its parent container*/
+.scaleSVG {
+    position:absolute;
+    left:0;
+    right:0;
+    top:0;
+    width:100%;
+    height:100%;
+}

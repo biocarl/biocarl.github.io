@@ -66,10 +66,10 @@ h1, h2, h3, h4, h5, h6 {
  * Links
  */
 a {
-  color: #4CAF50;
+  color: #0B72D9;
   text-decoration: none; }
   a:visited {
-    color: #357a38; }
+    color: #074c90; }
   a:hover {
     color: #111;
     text-decoration: underline; }
@@ -148,8 +148,9 @@ pre {
  * Site header
  */
 .site-header {
-  background-color: #4CAF50;
+  background-color: #3f51b5;
   height: 10vh;
+  width: 100vw;
   position: relative; }
 
 .site-title {
@@ -241,9 +242,13 @@ pre {
 
 .post-list {
   margin-left: 0;
-  list-style: none; }
+  list-style: none;
+  text-align: center; }
   .post-list > li {
-    margin-bottom: 30px; }
+    margin-bottom: 30px;
+    padding-left: 5px;
+    padding-right: 5px;
+    display: inline-block; }
 
 .post-meta {
   font-size: 14px;

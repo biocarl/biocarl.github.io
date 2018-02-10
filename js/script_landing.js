@@ -220,6 +220,9 @@ $(document).ready(function(){
   show("menue");
     const mq = window.matchMedia("(max-width: 480px)");
     if(mq.matches){
-  window.scrollTo(0,document.body.scrollHeight);
-  }
+	 window.scrollTo(0,document.body.scrollHeight);
+  } else{
+	//TODO
+	//show navbar(when mobile it should be already hidden),both only on home page
+}
 }); //End document.ready

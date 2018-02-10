@@ -1,0 +1,217 @@
+---
+layout: default 
+---
+
+<!DOCTYPE HTML>
+<html>
+<head>
+<!-- Imports -->
+
+<link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="{{ site.baseurl }}/assets/js/jquery.js"></script>
+
+<!-- CSS -->
+<style>
+
+.page-content{
+padding-top:0px !important;
+}
+
+.dropbox_wrapper{
+	text-align:center;
+}
+
+.preview_wrapper{
+	text-align:center;
+}
+
+#preview{
+display: inline-block;  
+}
+
+
+#dropbox{
+display: inline-block;  
+}
+
+
+</style>
+
+
+</head>
+<body>
+<!-- HTML -->
+
+
+
+
+<div><h1 style="font-size:xx-large;text-align:center;" >MotionPar<br><hr></h1></div>
+
+<div class="dropbox_wrapper">
+<div style="background-color:red;height:260px;width:260px;" id="dropbox">
+Put here your files! :-)
+</div>
+</div>
+
+<div style="font-size:x-large;text-align:center;" >
+<a href="#" id="downloadLink">Download processed SVG</a>
+</div>
+
+<div class="preview_wrapper">
+<div style="background-color:#d3d3d3;height:260px;width:260px;" id="preview">
+<br>
+<br>
+<br>
+<br>
+Preview here
+<br>
+...
+</div>
+</div>
+
+
+
+
+
+
+<!-- JS -->
+<script>
+
+var dropbox;
+var filename;
+
+dropbox = document.getElementById("dropbox");
+dropbox.addEventListener("dragenter", dragenter, false);
+dropbox.addEventListener("dragover", dragover, false);
+dropbox.addEventListener("drop", drop, false);
+
+
+function dragenter(e) {
+	e.stopPropagation();
+	e.preventDefault();
+}
+
+function dragover(e) {
+	e.stopPropagation();
+	e.preventDefault();
+}
+
+
+function drop(e) {
+	e.stopPropagation();
+	e.preventDefault();
+
+	var dt = e.dataTransfer;
+	var files = dt.files;
+
+	handleFiles(files);
+}
+
+function handleFiles(files) {
+	var fileList = this.files; /* now you can work with the file list */
+	for (var i = 0, numFiles = files.length; i < numFiles; i++) {
+		var file = files[i];
+		filename = file.name;
+		//update dropbox
+		document.getElementById("dropbox").innerHTML = file.name+", was seleceted";
+
+		//Reading file
+		var reader = new FileReader();
+		reader.readAsText(file);
+		reader.onloadend = function(){	
+			//Show to user
+			document.getElementById("dropbox").innerHTML = reader.result;
+			//Check if it a working svg
+			if(checkSVG()){
+			alterSVG();
+			}
+		};
+
+		//create SVG
+		var svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+		svg.setAttributeNS(null,"height","100%");
+		svg.setAttributeNS(null,"width","100%");
+		var svgNS = svg.namespaceURI;
+		var rect = document.createElementNS(svgNS,'rect');
+		rect.setAttribute('x',5);
+		rect.setAttribute('y',5);
+		rect.setAttribute('width',200);
+		rect.setAttribute('height',200);
+		rect.setAttribute('fill','#95B3D7');
+		svg.appendChild(rect);
+
+		//append to document
+		//document.body.appendChild(svg);
+		//document.getElementById("preview").appendChild(svg);
+
+	}
+}
+
+
+
+function feed(text){
+// give feedback what is happening...
+}
+
+
+function alterSVG(){
+	var doc = $("#dropbox").clone();
+	var svg = doc.children(":first");
+ 	
+	svg.children().each(function() {
+			console.log('First child elements: '+$(this).attr('id'));
+			});
+		
+	svg.children().css("stroke","red");
+
+	//$("#"+id).children().each(function() { $(this).css( "stroke", getRandomColor()); });
+	//$( "#"+id ).children().css( "stroke", color);
+
+	//var element = document.querySelector("#"+id);
+	//var cloneElement = element.cloneNode(true);
+	//element.parentNode.replaceChild(cloneElement, element);
+	//document.getElementById("preview").innerHTML = doc.documentElement.outerHTML;
+	//document.getElementById("dropbox").innerHTML = "oi"+doc.childNodes[0].toString();
+	
+
+	//Show the result	
+	//$("#preview").replaceWith(svg);
+	document.getElementById("preview").innerHTML = doc.html();
+	
+	$('#downloadLink').click(function(){
+    		downloadSVG(filename, 'preview','text/html');
+	});
+
+	//appendChild(root);
+	
+}
+
+function checkSVG(){
+	//bad format or more than one child.
+	if(false){
+		return false;
+	}
+
+	return true;
+}
+
+
+
+
+
+
+function downloadSVG(filename, elId, mimeType) {
+	console.log("params"+filename+"|"+elId+"|"+mimeType);
+    var elHtml = document.getElementById(elId).innerHTML;
+    var link = document.createElement('a');
+    mimeType = mimeType || 'text/plain';
+    link.setAttribute('download', filename);
+    link.setAttribute('href', 'data:' + mimeType + ';charset=utf-8,' + encodeURIComponent(elHtml));
+    link.click(); 
+}
+
+
+</script>
+</body>
+</html>
+

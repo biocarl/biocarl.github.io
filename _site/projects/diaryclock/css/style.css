@@ -1,0 +1,38 @@
+body, html {
+  height:100%;
+  /*background-color:   #3399FF;*/
+}
+
+/*Sections styling*/
+section {
+  width: 100vw;
+  padding: 0 0%;
+  display: table;
+  margin: 0;
+  position: relative;
+  max-width: none;
+  height: 90vh;
+}
+
+#home{
+    /* Center and scale the image nicely */
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-color: #fff;
+}
+
+/*The default for all svg-Elements*/
+.hide{
+    display: none;
+}
+
+/* For Scaling the SVG inline files to its parent container*/
+.scaleSVG {
+    position:absolute;
+    left:0;
+    right:0;
+    top:0;
+    width:100%;
+    height:100%;
+}

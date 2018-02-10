@@ -9,4 +9,6 @@ git pull
 git push
 
 echo "Deploy finished!"
+echo "Don't forget to remove the cache!"
+echo "https://www.cloudflare.com/a/caching/carlhauck.de"
 
