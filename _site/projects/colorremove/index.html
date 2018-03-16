@@ -11,7 +11,7 @@
 ">
 
   <link rel="stylesheet" href="/css/main.css">
-  <link rel="canonical" href="https://www.carlhauck.de/projects/motionpar/">
+  <link rel="canonical" href="https://www.carlhauck.de/projects/colorremove/">
   <link rel="alternate" type="application/rss+xml" title="Carl Hauck" href="https://www.carlhauck.de/feed.xml">
 </head>
 
@@ -122,7 +122,10 @@ display: inline-block;
 
 
 
-<div><h1 style="font-size:xx-large;text-align:center;" >MotionPar<br><hr></h1></div>
+<div><h1 style="font-size:xx-large;text-align:center;" >ColorRemove<br>
+<h3>Delete all shapes/paths which have a color filling in a certain range</h3>
+
+<hr></h1></div>
 
 <div class="dropbox_wrapper">
 <div style="background-color:red;height:260px;width:260px;" id="dropbox">
@@ -231,6 +234,41 @@ function feed(text){
 }
 
 
+
+function deleteNodes(node,color){
+	node.children().each(function() {
+		console.log("Enter in Recursion");
+		rgb = $(this).attr('fill').substring(4, $(this).attr('fill').length-1)
+         	.replace(/ /g, '')
+         	.split(',');
+		//rgb = parseRGB($(this).attr('fill'));
+	
+		hex = rgbToHex(rgb[0],rgb[1],rgb[2]);
+	
+		if(hex == color){
+			console.log("Deleting element");
+			$(this).remove();		
+		}else{
+			console.log("hex: "+hex + "||color: "+color);
+			console.log("rgb: "+rgb[0] + rgb[1] + rgb[2]);
+			if($(this).children().length != 0){
+			deleteNodes($(this),color);
+			}
+			else {
+				return true;
+			}
+		}
+		//console.log('First child elements: '+$(this).attr('id'));
+	});
+
+}
+
+
+function rgbToHex(r, g, b) {
+    return "#" + ((1 << 24) + (r << 16) + (g << 8) + b).toString(16).slice(1);
+}
+
+
 function alterSVG(){
 	var doc = $("#dropbox").clone();
 	var svg = doc.children(":first");
@@ -238,9 +276,10 @@ function alterSVG(){
 	svg.children().each(function() {
 			console.log('First child elements: '+$(this).attr('id'));
 			});
-		
-	svg.children().css("stroke","red");
+	
 
+	deleteNodes(svg,"#000000");
+		
 	//$("#"+id).children().each(function() { $(this).css( "stroke", getRandomColor()); });
 	//$( "#"+id ).children().css( "stroke", color);
 
