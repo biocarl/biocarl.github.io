@@ -9,7 +9,6 @@ filter: progid:DXImageTransform.Microsoft.gradient(startColorstr=#0B72D9, endCol
 	/* IE 8 */
 	-ms-filter: "progid:DXImageTransform.Microsoft.gradient(startColorstr=#0B72D9, endColorstr=#0B72D9)" no-repeat;
 
-
 	height:100%;
 	margin: 0;
 	padding-right: 0 !important;
@@ -38,16 +37,8 @@ height: 90vh;
 }
 
 #section1{
-
-
-
 }
 
-#section2{
-	font-family: 'Finger Paint', cursive;
-	font-size: xx-large;
-	background-color:#FE4B74;
-}
 
 #previewTitle{
 color: #FFFFFF;

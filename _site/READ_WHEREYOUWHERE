@@ -11,6 +11,7 @@ svgs are stored in the includes
 
 under /biocarl is a file test.html, when you call localhost/test you can see it unde jekyll
 
+
 First(!): Use Cloudflare as CMS! : https://www.cloudflare.com -> https://www.namecheap.com/support/knowledgebase/article.aspx/9607/2210/how-to-set-up-dns-records-for-your-domain-in-cloudflare-account
 ------ https://blog.cloudflare.com/secure-and-fast-github-pages-with-cloudflare/
 ------ https://www.cloudflare.com/a/overview/carlhauck.de
@@ -76,6 +77,60 @@ Doku-SVG's
 - add general class to svg: scaleSVG and hide
 - add classes to clickable elements
 - make hidden things(?)
+
+----
+Steps
+----
+
+Environment
+1. Set up Jekyll environment (incl. ruby)
+
+
+Basic
+1. Set up your github page (has to be public in the start)
+2. Set Custom domain in github
+3. Set namecheap server to github pages: https://www.namecheap.com/support/knowledgebase/article.aspx/9645/2208/how-do-i-link-my-domain-to-github-pages
+4. Point nameservers to cloudflare (and set up in cloudflare) :  https://www.namecheap.com/support/knowledgebase/article.aspx/9607/2210/how-to-set-up-dns-records-for-your-domain-in-cloudflare-account
+5. Make pagerule in cloudflare to enforce https: see middle of: https://blog.cloudflare.com/secure-and-fast-github-pages-with-cloudflare/
+5. Set repo private (1) and wait for dns modification (up to 24h)
+6. For CMS: (Set up cloudcannon: https://cloudcannon.com/)
+
+
+Website
+1. Pick a theme: http://jekyllthemes.org/
+2. 
+
+SEO
+1. Set up Google Analyitics and Google Optimize
+2.
+
+EMail
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
