@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    
+    <!-- Scnippet for Google Optimize to avoid flicker-->
+<style>.async-hide { opacity: 0 !important} </style>
+<!--
+<script>(function(a,s,y,n,c,h,i,d,e){s.className+=' '+y;h.start=1*new Date;
+h.end=i=function(){s.className=s.className.replace(RegExp(' ?'+y),'')};
+(a[n]=a[n]||[]).hide=h;setTimeout(function(){i();h.end=null},c);h.timeout=c;
+})(window,document.documentElement,'async-hide','dataLayer',4000,
+{'GTM-PLLFSRQ':true});</script>
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-113557676-1', 'auto');
+  ga('require', 'GTM-PLLFSRQ');
+  ga('send', 'pageview');
+</script>
+-->
+
+
+    
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>5 things I learned about rails security during my internship</title>
+  <meta name="description" content="When most people hear rails security they think of very specfic, unlikelyvulnerabilities you don’t really have to worry since rails has a pretty highreputati...">
+
+  <link rel="stylesheet" href="/css/main.css">
+  <link rel="canonical" href="https://www.carlhauck.de/jekyll/update/2018/01/29/rails-security-part1.html">
+  <link rel="alternate" type="application/rss+xml" title="Carl Hauck" href="https://www.carlhauck.de/feed.xml">
+</head>
+
+
+  <body>
+
+<style>
+.site-header:after {
+    background: linear-gradient(-45deg, #f5f3ee 16px, transparent 0), linear-gradient(45deg, #f5f3ee 16px, transparent 0);
+    background-position: left-bottom;
+    background-repeat: repeat-x;
+    background-size: 32px 32px;
+    content: " ";
+    display: block;
+    position: absolute;
+    bottom: 0px;
+    left: 0px;
+    width: 100%;
+    height: 32px;
+}
+</style>
+
+    <header class="site-header">
+
+  <div class="wrapper">
+	
+	<!--me -->
+	<!--
+    <a class="site-title" href="/">Carl Hauck</a>
+	-->
+
+    <nav class="site-nav">
+      <a href="#" class="menu-icon">
+        <svg viewBox="0 0 18 15">
+          <path fill="#424242" d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.031C17.335,0,18,0.665,18,1.484L18,1.484z"/>
+          <path fill="#424242" d="M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0c0-0.82,0.665-1.484,1.484-1.484 h15.031C17.335,6.031,18,6.696,18,7.516L18,7.516z"/>
+          <path fill="#424242" d="M18,13.516C18,14.335,17.335,15,16.516,15H1.484C0.665,15,0,14.335,0,13.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.031C17.335,12.031,18,12.696,18,13.516L18,13.516z"/>
+        </svg>
+      </a>
+
+      <div class="trigger">
+	
+	
+	
+		
+	
+		
+	
+		
+	
+		
+	
+		
+	
+		
+	
+		
+         <a class="page-link" href="/">Home</a>
+		  
+	
+		
+         <a class="page-link" href="/blog/">Blog</a>
+		  
+	
+		
+         <a class="page-link" href="/projects/">Projects</a>
+		  
+	
+		
+         <a class="page-link" href="/about/">About</a>
+		  
+	
+
+      </div>
+    </nav>
+
+  </div>
+
+</header>
+
+
+    <div class="page-content">
+      <div class="wrapper">
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+
+  <header class="post-header">
+    <h1 class="post-title" itemprop="name headline">5 things I learned about rails security during my internship</h1>
+    <p class="post-meta"><time datetime="2018-01-29T21:29:40+01:00" itemprop="datePublished">Jan 29, 2018</time></p>
+  </header>
+
+  <div class="post-content" itemprop="articleBody">
+    <p>When most people hear rails security they think of very specfic, unlikely
+vulnerabilities you don’t really have to worry since rails has a pretty high
+reputation in terms of security. But independent of which framework you use, in the end it
+is the developer which writes secure code or not. During my rails internship I
+was mostly responsible for finding vulnerabilities in the codebase. During 3
+months I could try all different kinds of things. Here I list 5 common mistakes
+devolpers commit which also includes non-rails related things like server configuration.</p>
+
+<h1 id="1---mass-assignments">1 - Mass assignments</h1>
+<p>This is probably one of the most common pitfall. The rails framework will help
+you a lot when doing things quickly. Instead of assigning every value individually you
+simply pass a hash with values to the update/create constructor of your model.
+But this can have many downsides. The question is where these values come from. As a general rule. Be very
+picky about how you handle user defined input. Once you let a user update e.g. a
+user model and you don’t check the passed parameters the user can change every
+field (including booleans like admin, paidSubscription etc.).</p>
+
+<figure class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span></span><span class="c1">#.../views/users/_form.html.haml</span>
+
+  <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">input</span> <span class="ss">:email</span>
+  <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">input</span> <span class="ss">:name</span>
+  <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">input</span> <span class="ss">:last_name</span>
+  <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">input</span> <span class="ss">:phone</span>
+
+<span class="c1">#.../controller/user_controller.rb</span>
+<span class="no">User</span><span class="o">.</span><span class="n">update_user</span><span class="p">(</span><span class="n">params</span><span class="p">,</span> <span class="vi">@current_user</span><span class="p">)</span><span class="o">.</span>
+
+<span class="c1">#params</span>
+<span class="p">{</span>
+  <span class="s2">&quot;email&quot;</span> <span class="o">=&gt;</span> <span class="n">dummy</span><span class="vi">@gmail</span><span class="o">.</span><span class="n">com</span><span class="p">,</span>
+  <span class="s2">&quot;name&quot;</span> <span class="o">=&gt;</span> <span class="s2">&quot;Max&quot;</span><span class="p">,</span>
+  <span class="s2">&quot;last_name&quot;</span> <span class="o">=&gt;</span> <span class="s2">&quot;Mic&quot;</span><span class="p">,</span>
+  <span class="s2">&quot;phone&quot;</span> <span class="o">=&gt;</span> <span class="mi">15719583721</span><span class="p">,</span>
+  <span class="s2">&quot;is_admin&quot;</span> <span class="o">=&gt;</span> <span class="kp">true</span>
+<span class="p">}</span></code></pre></figure>
+
+<p>Since Rails 4 there is a recommend way to go: strong parameters. Whenever you
+use parameters for populating your databases you define beforehand which subset
+of the parameters you want to allow. Through whitelisting allowed parameters you
+are not in danger to update a field which you havn’t intended.</p>
+
+<figure class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span></span><span class="no">User</span><span class="o">.</span><span class="n">update_user</span><span class="p">(</span><span class="n">user_params</span><span class="p">,</span> <span class="vi">@current_user</span><span class="p">)</span>
+
+<span class="k">def</span> <span class="nf">user_params</span>
+    <span class="n">params</span><span class="o">.</span><span class="n">require</span><span class="p">(</span><span class="ss">:user</span><span class="p">)</span><span class="o">.</span><span class="n">permit</span><span class="p">(</span><span class="ss">:phone</span><span class="p">,</span> <span class="ss">:email</span><span class="p">,</span> <span class="ss">:name</span><span class="p">,</span> <span class="ss">:last_name</span><span class="p">)</span>
+<span class="k">end</span></code></pre></figure>
+
+<p>If you still use Rails 3 or lower you should consider the gem ‘protected_attributes’. An official rails gem which disallows
+changing attributes in a mass assignment.</p>
+
+<h1 id="2---validations">2 - Validations</h1>
+<p>A general rule should be: Whatever information you store in your database
+should be validated first. Preferably you use here a whitelist pattern for your
+regular expressions. What I mean by that:
+Instead of doing this (blacklisting)</p>
+
+<figure class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span></span>  <span class="n">validates_format_of</span> <span class="ss">:profile_description</span><span class="p">,</span> <span class="ss">:with</span> <span class="o">=&gt;</span> <span class="sr">/&lt;script&gt;/</span><span class="p">,</span> <span class="ss">:allow_blank</span> <span class="o">=</span> <span class="kp">true</span></code></pre></figure>
+
+<p>You should be doing this (whitelist approach)</p>
+
+<figure class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span></span>  <span class="n">validates_format_of</span> <span class="ss">:profile_description</span><span class="p">,</span> <span class="ss">:with</span> <span class="o">=&gt;</span> <span class="sr">/\A[a-zA-Z]+\z/</span><span class="p">,</span> <span class="ss">:allow_blank</span> <span class="o">=</span> <span class="kp">true</span></code></pre></figure>
+
+<p>this only allows the input you really intended.
+In the first example you won’t allow the script tag. But doesn’t avoid the user to insert javascript. One
+example is a construct like <code>onClick="alarm('Hi')"</code>, which doesn’t need that tag. Or the famous
+<a href="https://hackaday.com/2018/02/25/css-steals-your-web-data/">CSS keylogger</a> which is malicious by it’s own and doesn’t
+need any javascript. The possibilities (see <a href="https://stackoverflow.com/questions/37435077/execute-javascript-for-xss-without-script-tags">example 1</a> and <a href="https://stackoverflow.com/questions/476276/using-javascript-in-css">example 2</a>) are too vast in order to blacklist every potentially malicous code.
+Therefore we want to use a whitelist approach. In the second example we will
+allow characters only, which is enough and should’nt be a limitation for the
+user.</p>
+
+<p>Ideally you should do this for every single form field. This is a quite messy
+thing to do but I my opinion still worth it:</p>
+
+<p><strong>a)</strong> You don’t have to worry about downstream vulnerabilities when working with
+your data.</p>
+
+<p>An example: You want to highlight the provided users description in
+their profile. Your intern doesn’t now well the haml-syntax so he does it the
+html way he knows:</p>
+
+<figure class="highlight"><pre><code class="language-haml" data-lang="haml"><span></span>  &lt;%= &quot;&lt;b&gt;<span class="si">#{</span><span class="vi">@user</span><span class="o">.</span><span class="n">try</span><span class="p">(</span><span class="ss">:profile_description</span><span class="p">)</span><span class="si">}</span>&lt;/b&gt;&quot; %&gt;</code></pre></figure>
+
+<p>He does a test and is not satisfied. Haml syntax seems to escape html by
+default (luckily! - see <a href="http://haml.info/docs/yardoc/file.REFERENCE.html#rails-xss-protection">documentation</a>).
+He quickly discovers the option html_safe. Now the html is rendered.</p>
+
+<figure class="highlight"><pre><code class="language-haml" data-lang="haml"><span></span>  &lt;%= &quot;&lt;b&gt;<span class="si">#{</span><span class="vi">@user</span><span class="o">.</span><span class="n">try</span><span class="p">(</span><span class="ss">:profile_description</span><span class="p">)</span><span class="si">}</span>&lt;/b&gt;&quot;.html_safe %&gt;</code></pre></figure>
+
+<p>If the description field is not validated beforehand we now have a entrypoint
+for XSS (Cross-Site-Scripting). E.g. we could insert a small javascript snippet
+which steals the user session of each user visiting your profile. A very famous example of this is the <a href="https://en.wikipedia.org/wiki/Samy_(computer_worm)">worm Samy</a> which was affecting one
+million MySpace users.
+This seems very obvious and easy to avoid. But with a big codebase things get complicated and there will be a lot of other things to consider once your have
+unknown user input. And now imagine several devolpers are contributing and some of them are not as security aware.</p>
+
+<p><strong>b)</strong> Third party apps do not have to worry about the integrity of data. You offer
+an export function to allow other companies using your data in their internal
+systems? Imagine they don’t escape string when rendering to html.</p>
+
+<p><em>Important note:</em>
+Don’t use the following methods when working with user input:</p>
+
+<figure class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span></span>  <span class="n">update_all</span>
+  <span class="n">update_attribute</span>
+  <span class="n">update_column</span>
+  <span class="n">update_columns</span></code></pre></figure>
+
+<p>They all skip validations when updating tables. You will read this at the very end
+of the <a href="http://guides.rubyonrails.org/active_record_validations.html">official security guide</a>. In my opinion it is all to easy to
+use this method without knowing the implications.</p>
+
+<h1 id="3---permission-policies">3 - Permission policies</h1>
+
+<p>A basic concept for internet security is the following: It is only a question of
+time till a person with malicious intent will be able to access your system.
+For example through session hijacking or password spoofing or phising attacks.
+With increasing user/company size this will be more likely. Now once you can assume that you have a
+malicous user logged in ask yourself how can you limit the damage. Really think about secure permission policy.
+Who is able to see what data under what condition. For users with critical permissions
+enforce two-factor authentication, password-confirmation for critical tasks etc.</p>
+
+<p>A small code sample very you typically should be very aware:</p>
+
+<p>A before statement in the controller, you really shouldn’t do this:</p>
+
+<figure class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span></span><span class="k">class</span> <span class="nc">UsersController</span> <span class="o">&lt;</span> <span class="no">ApplicationController</span>
+
+  <span class="n">before_action</span> <span class="ss">:set_user</span><span class="p">,</span> <span class="ss">only</span><span class="p">:</span> <span class="o">[</span><span class="ss">:show</span><span class="p">,</span> <span class="ss">:edit</span><span class="p">,</span> <span class="ss">:update</span><span class="p">,</span> <span class="ss">:destroy</span><span class="o">]</span>
+
+  <span class="c1">#...</span>
+
+  <span class="k">def</span> <span class="nf">set_user</span>
+        <span class="vi">@user</span> <span class="o">=</span> <span class="no">User</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="n">params</span><span class="o">[</span><span class="ss">:id</span><span class="o">]</span><span class="p">)</span></code></pre></figure>
+
+<p>Instead you should check for example for current user and if the current user has permissions and redirect if the request is not valid.</p>
+
+<figure class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span></span>    <span class="k">def</span> <span class="nf">set_user</span>
+        <span class="vi">@user</span> <span class="o">=</span> <span class="no">User</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="nb">id</span><span class="p">:</span> <span class="n">params</span><span class="o">[</span><span class="ss">:id</span><span class="o">]</span><span class="p">,</span> <span class="ss">account_id</span><span class="p">:</span> <span class="n">current_user</span><span class="o">.</span><span class="n">account_id</span><span class="p">)</span><span class="o">.</span><span class="n">first</span>
+        <span class="k">if</span> <span class="vi">@user</span><span class="o">.</span><span class="n">blank?</span> <span class="o">&amp;&amp;</span> <span class="n">params</span><span class="o">[</span><span class="ss">:id</span><span class="o">].</span><span class="n">present?</span>
+            <span class="n">redirect_to</span> <span class="n">users_path</span>
+            <span class="k">return</span>
+          <span class="k">end</span>
+        <span class="k">end</span>
+    <span class="k">end</span></code></pre></figure>
+
+<h1 id="4---sql-injection">4 - SQL injection</h1>
+<p>Here a small word on SQL injection. Rails has through its model
+abstraction very little problems with dependency injection. But a few methods allow to inject SQL statements which were not as intended.</p>
+
+<figure class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span></span><span class="no">User</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="s2">&quot;name = &#39;</span><span class="si">#{</span><span class="n">params</span><span class="o">[</span><span class="ss">:name</span><span class="o">]</span><span class="si">}</span><span class="s2">&#39;&quot;</span><span class="p">)</span>
+
+<span class="c1">#params[:name]</span>
+<span class="s2">&quot;Michael&quot;</span> <span class="no">OR</span> <span class="s1">&#39;SQL-INJECTION&#39;</span></code></pre></figure>
+
+<p>Better write</p>
+
+<figure class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span></span><span class="no">User</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="ss">:name</span> <span class="o">=&gt;</span> <span class="n">params</span><span class="o">[</span><span class="ss">:name</span><span class="o">]</span><span class="p">)</span></code></pre></figure>
+
+<p>For a more examples and a better understanding I really can recommend the site <a href="https://rails-sqli.org/">rails-sqli</a></p>
+
+<h1 id="5---check-your-buckets">5 - Check your buckets!</h1>
+
+<p>This is a big one. You might not believe what things you can find on the
+internet when you search for some random amazon aws buckets. This is a very
+obvious thing but this is actually not that unlikely. Imagine the following
+scenario: You do some tests in sub folder of your bucket. The tests fail you try switching it to public to check if
+it is a permission issue. You forget to restore to private permission.
+Later you decide to store there some backups. There is a bunch of crawlers who
+are just looking for badly secured buckets. Always check your permissions, at
+best automatically (for larger cases consider using like the open source software <a href="https://github.com/Netflix/edda">edda from
+netflix</a>).</p>
+
+<h1 id="further-resources">Further resources</h1>
+
+<ul>
+  <li>If you have time, go through the official security guide: <a href="http://guides.rubyonrails.org/security.html">http://guides.rubyonrails.org/security.html</a></li>
+  <li>Read into tools like brakeman. Automated testing which also will recommend you certain patches and updates of dependencies: <a href="https://github.com/presidentbeef/brakeman">https://github.com/presidentbeef/brakeman</a></li>
+  <li>RailsGoat, a very good tutorial/resource where you have to fix an example app: <a href="https://github.com/OWASP/railsgoat">https://github.com/OWASP/railsgoat</a></li>
+</ul>
+
+<hr />
+
+
+  </div>
+
+</article>
+
+      </div>
+    </div>
+
+  </body>
+
+</html>

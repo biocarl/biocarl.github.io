@@ -6,81 +6,199 @@
 </description>
     <link>https://www.carlhauck.de/</link>
     <atom:link href="https://www.carlhauck.de/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Tue, 08 May 2018 21:25:26 +0200</pubDate>
-    <lastBuildDate>Tue, 08 May 2018 21:25:26 +0200</lastBuildDate>
+    <pubDate>Sun, 27 May 2018 18:25:12 +0200</pubDate>
+    <lastBuildDate>Sun, 27 May 2018 18:25:12 +0200</lastBuildDate>
     <generator>Jekyll v3.6.2</generator>
     
       <item>
-        <title>New Blog Article</title>
-        <description>&lt;p&gt;This is a pretty big test here&lt;/p&gt;
+        <title>5 things I learned about rails security during my internship</title>
+        <description>&lt;p&gt;When most people hear rails security they think of very specfic, unlikely
+vulnerabilities you don’t really have to worry since rails has a pretty high
+reputation in terms of security. But independent of which framework you use, in the end it
+is the developer which writes secure code or not. During my rails internship I
+was mostly responsible for finding vulnerabilities in the codebase. During 3
+months I could try all different kinds of things. Here I list 5 common mistakes
+devolpers commit which also includes non-rails related things like server configuration.&lt;/p&gt;
 
-&lt;p&gt; &lt;/p&gt;
+&lt;h1 id=&quot;1---mass-assignments&quot;&gt;1 - Mass assignments&lt;/h1&gt;
+&lt;p&gt;This is probably one of the most common pitfall. The rails framework will help
+you a lot when doing things quickly. Instead of assigning every value individually you
+simply pass a hash with values to the update/create constructor of your model.
+But this can have many downsides. The question is where these values come from. As a general rule. Be very
+picky about how you handle user defined input. Once you let a user update e.g. a
+user model and you don’t check the passed parameters the user can change every
+field (including booleans like admin, paidSubscription etc.).&lt;/p&gt;
 
-&lt;blockquote&gt;
-  &lt;p&gt;One last style&lt;/p&gt;
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-ruby&quot; data-lang=&quot;ruby&quot;&gt;&lt;span&gt;&lt;/span&gt;&lt;span class=&quot;c1&quot;&gt;#.../views/users/_form.html.haml&lt;/span&gt;
 
-  &lt;p&gt;yspp&lt;/p&gt;
-&lt;/blockquote&gt;
+  &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;f&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;input&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:email&lt;/span&gt;
+  &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;f&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;input&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:name&lt;/span&gt;
+  &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;f&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;input&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:last_name&lt;/span&gt;
+  &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;f&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;input&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:phone&lt;/span&gt;
+
+&lt;span class=&quot;c1&quot;&gt;#.../controller/user_controller.rb&lt;/span&gt;
+&lt;span class=&quot;no&quot;&gt;User&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;update_user&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;params&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;vi&quot;&gt;@current_user&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;
+
+&lt;span class=&quot;c1&quot;&gt;#params&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+  &lt;span class=&quot;s2&quot;&gt;&amp;quot;email&amp;quot;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;dummy&lt;/span&gt;&lt;span class=&quot;vi&quot;&gt;@gmail&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;com&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+  &lt;span class=&quot;s2&quot;&gt;&amp;quot;name&amp;quot;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;Max&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+  &lt;span class=&quot;s2&quot;&gt;&amp;quot;last_name&amp;quot;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;Mic&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+  &lt;span class=&quot;s2&quot;&gt;&amp;quot;phone&amp;quot;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;15719583721&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+  &lt;span class=&quot;s2&quot;&gt;&amp;quot;is_admin&amp;quot;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;kp&quot;&gt;true&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+
+&lt;p&gt;Since Rails 4 there is a recommend way to go: strong parameters. Whenever you
+use parameters for populating your databases you define beforehand which subset
+of the parameters you want to allow. Through whitelisting allowed parameters you
+are not in danger to update a field which you havn’t intended.&lt;/p&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-ruby&quot; data-lang=&quot;ruby&quot;&gt;&lt;span&gt;&lt;/span&gt;&lt;span class=&quot;no&quot;&gt;User&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;update_user&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;user_params&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;vi&quot;&gt;@current_user&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+
+&lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;user_params&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;params&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;require&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;ss&quot;&gt;:user&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;permit&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;ss&quot;&gt;:phone&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:email&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:name&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:last_name&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+
+&lt;p&gt;If you still use Rails 3 or lower you should consider the gem ‘protected_attributes’. An official rails gem which disallows
+changing attributes in a mass assignment.&lt;/p&gt;
+
+&lt;h1 id=&quot;2---validations&quot;&gt;2 - Validations&lt;/h1&gt;
+&lt;p&gt;A general rule should be: Whatever information you store in your database
+should be validated first. Preferably you use here a whitelist pattern for your
+regular expressions. What I mean by that:
+Instead of doing this (blacklisting)&lt;/p&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-ruby&quot; data-lang=&quot;ruby&quot;&gt;&lt;span&gt;&lt;/span&gt;  &lt;span class=&quot;n&quot;&gt;validates_format_of&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:profile_description&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:with&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;sr&quot;&gt;/&amp;lt;script&amp;gt;/&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:allow_blank&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;kp&quot;&gt;true&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+
+&lt;p&gt;You should be doing this (whitelist approach)&lt;/p&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-ruby&quot; data-lang=&quot;ruby&quot;&gt;&lt;span&gt;&lt;/span&gt;  &lt;span class=&quot;n&quot;&gt;validates_format_of&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:profile_description&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:with&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;sr&quot;&gt;/\A[a-zA-Z]+\z/&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:allow_blank&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;kp&quot;&gt;true&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+
+&lt;p&gt;this only allows the input you really intended.
+In the first example you won’t allow the script tag. But doesn’t avoid the user to insert javascript. One
+example is a construct like &lt;code&gt;onClick=&quot;alarm('Hi')&quot;&lt;/code&gt;, which doesn’t need that tag. Or the famous
+&lt;a href=&quot;https://hackaday.com/2018/02/25/css-steals-your-web-data/&quot;&gt;CSS keylogger&lt;/a&gt; which is malicious by it’s own and doesn’t
+need any javascript. The possibilities (see &lt;a href=&quot;https://stackoverflow.com/questions/37435077/execute-javascript-for-xss-without-script-tags&quot;&gt;example 1&lt;/a&gt; and &lt;a href=&quot;https://stackoverflow.com/questions/476276/using-javascript-in-css&quot;&gt;example 2&lt;/a&gt;) are too vast in order to blacklist every potentially malicous code.
+Therefore we want to use a whitelist approach. In the second example we will
+allow characters only, which is enough and should’nt be a limitation for the
+user.&lt;/p&gt;
+
+&lt;p&gt;Ideally you should do this for every single form field. This is a quite messy
+thing to do but I my opinion still worth it:&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;a)&lt;/strong&gt; You don’t have to worry about downstream vulnerabilities when working with
+your data.&lt;/p&gt;
+
+&lt;p&gt;An example: You want to highlight the provided users description in
+their profile. Your intern doesn’t now well the haml-syntax so he does it the
+html way he knows:&lt;/p&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-haml&quot; data-lang=&quot;haml&quot;&gt;&lt;span&gt;&lt;/span&gt;  &amp;lt;%= &amp;quot;&amp;lt;b&amp;gt;&lt;span class=&quot;si&quot;&gt;#{&lt;/span&gt;&lt;span class=&quot;vi&quot;&gt;@user&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;try&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;ss&quot;&gt;:profile_description&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;}&lt;/span&gt;&amp;lt;/b&amp;gt;&amp;quot; %&amp;gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+
+&lt;p&gt;He does a test and is not satisfied. Haml syntax seems to escape html by
+default (luckily! - see &lt;a href=&quot;http://haml.info/docs/yardoc/file.REFERENCE.html#rails-xss-protection&quot;&gt;documentation&lt;/a&gt;).
+He quickly discovers the option html_safe. Now the html is rendered.&lt;/p&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-haml&quot; data-lang=&quot;haml&quot;&gt;&lt;span&gt;&lt;/span&gt;  &amp;lt;%= &amp;quot;&amp;lt;b&amp;gt;&lt;span class=&quot;si&quot;&gt;#{&lt;/span&gt;&lt;span class=&quot;vi&quot;&gt;@user&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;try&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;ss&quot;&gt;:profile_description&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;}&lt;/span&gt;&amp;lt;/b&amp;gt;&amp;quot;.html_safe %&amp;gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+
+&lt;p&gt;If the description field is not validated beforehand we now have a entrypoint
+for XSS (Cross-Site-Scripting). E.g. we could insert a small javascript snippet
+which steals the user session of each user visiting your profile. A very famous example of this is the &lt;a href=&quot;https://en.wikipedia.org/wiki/Samy_(computer_worm)&quot;&gt;worm Samy&lt;/a&gt; which was affecting one
+million MySpace users.
+This seems very obvious and easy to avoid. But with a big codebase things get complicated and there will be a lot of other things to consider once your have
+unknown user input. And now imagine several devolpers are contributing and some of them are not as security aware.&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;b)&lt;/strong&gt; Third party apps do not have to worry about the integrity of data. You offer
+an export function to allow other companies using your data in their internal
+systems? Imagine they don’t escape string when rendering to html.&lt;/p&gt;
+
+&lt;p&gt;&lt;em&gt;Important note:&lt;/em&gt;
+Don’t use the following methods when working with user input:&lt;/p&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-ruby&quot; data-lang=&quot;ruby&quot;&gt;&lt;span&gt;&lt;/span&gt;  &lt;span class=&quot;n&quot;&gt;update_all&lt;/span&gt;
+  &lt;span class=&quot;n&quot;&gt;update_attribute&lt;/span&gt;
+  &lt;span class=&quot;n&quot;&gt;update_column&lt;/span&gt;
+  &lt;span class=&quot;n&quot;&gt;update_columns&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+
+&lt;p&gt;They all skip validations when updating tables. You will read this at the very end
+of the &lt;a href=&quot;http://guides.rubyonrails.org/active_record_validations.html&quot;&gt;official security guide&lt;/a&gt;. In my opinion it is all to easy to
+use this method without knowing the implications.&lt;/p&gt;
+
+&lt;h1 id=&quot;3---permission-policies&quot;&gt;3 - Permission policies&lt;/h1&gt;
+
+&lt;p&gt;A basic concept for internet security is the following: It is only a question of
+time till a person with malicious intent will be able to access your system.
+For example through session hijacking or password spoofing or phising attacks.
+With increasing user/company size this will be more likely. Now once you can assume that you have a
+malicous user logged in ask yourself how can you limit the damage. Really think about secure permission policy.
+Who is able to see what data under what condition. For users with critical permissions
+enforce two-factor authentication, password-confirmation for critical tasks etc.&lt;/p&gt;
+
+&lt;p&gt;A small code sample very you typically should be very aware:&lt;/p&gt;
+
+&lt;p&gt;A before statement in the controller, you really shouldn’t do this:&lt;/p&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-ruby&quot; data-lang=&quot;ruby&quot;&gt;&lt;span&gt;&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;UsersController&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;ApplicationController&lt;/span&gt;
+
+  &lt;span class=&quot;n&quot;&gt;before_action&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:set_user&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;only&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;ss&quot;&gt;:show&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:edit&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:update&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:destroy&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt;
+
+  &lt;span class=&quot;c1&quot;&gt;#...&lt;/span&gt;
+
+  &lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;set_user&lt;/span&gt;
+        &lt;span class=&quot;vi&quot;&gt;@user&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;User&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;find&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;params&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;ss&quot;&gt;:id&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+
+&lt;p&gt;Instead you should check for example for current user and if the current user has permissions and redirect if the request is not valid.&lt;/p&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-ruby&quot; data-lang=&quot;ruby&quot;&gt;&lt;span&gt;&lt;/span&gt;    &lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;set_user&lt;/span&gt;
+        &lt;span class=&quot;vi&quot;&gt;@user&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;User&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;where&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;id&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;params&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;ss&quot;&gt;:id&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;account_id&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;current_user&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;account_id&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;first&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;vi&quot;&gt;@user&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;blank?&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;amp;&amp;amp;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;params&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;ss&quot;&gt;:id&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;].&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;present?&lt;/span&gt;
+            &lt;span class=&quot;n&quot;&gt;redirect_to&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;users_path&lt;/span&gt;
+            &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt;
+          &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+
+&lt;h1 id=&quot;4---sql-injection&quot;&gt;4 - SQL injection&lt;/h1&gt;
+&lt;p&gt;Here a small word on SQL injection. Rails has through its model
+abstraction very little problems with dependency injection. But a few methods allow to inject SQL statements which were not as intended.&lt;/p&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-ruby&quot; data-lang=&quot;ruby&quot;&gt;&lt;span&gt;&lt;/span&gt;&lt;span class=&quot;no&quot;&gt;User&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;where&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&amp;quot;name = &amp;#39;&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;#{&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;params&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;ss&quot;&gt;:name&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&amp;#39;&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+
+&lt;span class=&quot;c1&quot;&gt;#params[:name]&lt;/span&gt;
+&lt;span class=&quot;s2&quot;&gt;&amp;quot;Michael&amp;quot;&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;OR&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;SQL-INJECTION&amp;#39;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+
+&lt;p&gt;Better write&lt;/p&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-ruby&quot; data-lang=&quot;ruby&quot;&gt;&lt;span&gt;&lt;/span&gt;&lt;span class=&quot;no&quot;&gt;User&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;where&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;ss&quot;&gt;:name&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;params&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;ss&quot;&gt;:name&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+
+&lt;p&gt;For a more examples and a better understanding I really can recommend the site &lt;a href=&quot;https://rails-sqli.org/&quot;&gt;rails-sqli&lt;/a&gt;&lt;/p&gt;
+
+&lt;h1 id=&quot;5---check-your-buckets&quot;&gt;5 - Check your buckets!&lt;/h1&gt;
+
+&lt;p&gt;This is a big one. You might not believe what things you can find on the
+internet when you search for some random amazon aws buckets. This is a very
+obvious thing but this is actually not that unlikely. Imagine the following
+scenario: You do some tests in sub folder of your bucket. The tests fail you try switching it to public to check if
+it is a permission issue. You forget to restore to private permission.
+Later you decide to store there some backups. There is a bunch of crawlers who
+are just looking for badly secured buckets. Always check your permissions, at
+best automatically (for larger cases consider using like the open source software &lt;a href=&quot;https://github.com/Netflix/edda&quot;&gt;edda from
+netflix&lt;/a&gt;).&lt;/p&gt;
+
+&lt;h1 id=&quot;further-resources&quot;&gt;Further resources&lt;/h1&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;If you have time, go through the official security guide: &lt;a href=&quot;http://guides.rubyonrails.org/security.html&quot;&gt;http://guides.rubyonrails.org/security.html&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;Read into tools like brakeman. Automated testing which also will recommend you certain patches and updates of dependencies: &lt;a href=&quot;https://github.com/presidentbeef/brakeman&quot;&gt;https://github.com/presidentbeef/brakeman&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;RailsGoat, a very good tutorial/resource where you have to fix an example app: &lt;a href=&quot;https://github.com/OWASP/railsgoat&quot;&gt;https://github.com/OWASP/railsgoat&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;hr /&gt;
+
 </description>
         <pubDate>Mon, 29 Jan 2018 21:29:40 +0100</pubDate>
-        <link>https://www.carlhauck.de/jekyll/update/2018/01/29/new-blog-article.html</link>
-        <guid isPermaLink="true">https://www.carlhauck.de/jekyll/update/2018/01/29/new-blog-article.html</guid>
-        
-        
-        <category>jekyll</category>
-        
-        <category>update</category>
-        
-      </item>
-    
-      <item>
-        <title>Another blog post</title>
-        <description>&lt;p&gt;You’ll find this post in your &lt;code class=&quot;highlighter-rouge&quot;&gt;_posts&lt;/code&gt; directory. Go ahead and edit it and re-build the site to see your changes. You can rebuild the site in many different ways, but the most common way is to run &lt;code class=&quot;highlighter-rouge&quot;&gt;jekyll serve&lt;/code&gt;, which launches a web server and auto-regenerates your site when a file is updated.&lt;/p&gt;
-
-&lt;p&gt;To add new posts, simply add a file in the &lt;code class=&quot;highlighter-rouge&quot;&gt;_posts&lt;/code&gt; directory that follows the convention &lt;code class=&quot;highlighter-rouge&quot;&gt;YYYY-MM-DD-name-of-post.ext&lt;/code&gt; and includes the necessary front matter. Take a look at the source for this post to get an idea about how it works.&lt;/p&gt;
-
-&lt;p&gt;Jekyll also offers powerful support for code snippets:&lt;/p&gt;
-
-&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-ruby&quot; data-lang=&quot;ruby&quot;&gt;&lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;print_hi&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;name&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-  &lt;span class=&quot;nb&quot;&gt;puts&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;Hi, &lt;/span&gt;&lt;span class=&quot;si&quot;&gt;#{&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;name&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;
-&lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
-&lt;span class=&quot;n&quot;&gt;print_hi&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;'Tom'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-&lt;span class=&quot;c1&quot;&gt;#=&amp;gt; prints 'Hi, Tom' to STDOUT.&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
-
-&lt;p&gt;Check out the &lt;a href=&quot;http://jekyllrb.com/docs/home&quot;&gt;Jekyll docs&lt;/a&gt; for more info on how to get the most out of Jekyll. File all bugs/feature requests at &lt;a href=&quot;https://github.com/jekyll/jekyll&quot;&gt;Jekyll’s GitHub repo&lt;/a&gt;. If you have questions, you can ask them on &lt;a href=&quot;https://talk.jekyllrb.com/&quot;&gt;Jekyll Talk&lt;/a&gt;.&lt;/p&gt;
-
-</description>
-        <pubDate>Mon, 29 Jan 2018 21:29:40 +0100</pubDate>
-        <link>https://www.carlhauck.de/jekyll/update/2018/01/29/another-post.html</link>
-        <guid isPermaLink="true">https://www.carlhauck.de/jekyll/update/2018/01/29/another-post.html</guid>
-        
-        
-        <category>jekyll</category>
-        
-        <category>update</category>
-        
-      </item>
-    
-      <item>
-        <title>Welcome to Jekyll!</title>
-        <description>&lt;p&gt;You’ll find this post in your &lt;code class=&quot;highlighter-rouge&quot;&gt;_posts&lt;/code&gt; directory. Go ahead and edit it and re-build the site to see your changes. You can rebuild the site in many different ways, but the most common way is to run &lt;code class=&quot;highlighter-rouge&quot;&gt;jekyll serve&lt;/code&gt;, which launches a web server and auto-regenerates your site when a file is updated.&lt;/p&gt;
-
-&lt;p&gt;To add new posts, simply add a file in the &lt;code class=&quot;highlighter-rouge&quot;&gt;_posts&lt;/code&gt; directory that follows the convention &lt;code class=&quot;highlighter-rouge&quot;&gt;YYYY-MM-DD-name-of-post.ext&lt;/code&gt; and includes the necessary front matter. Take a look at the source for this post to get an idea about how it works.&lt;/p&gt;
-
-&lt;p&gt;Jekyll also offers powerful support for code snippets:&lt;/p&gt;
-
-&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-ruby&quot; data-lang=&quot;ruby&quot;&gt;&lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;print_hi&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;name&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-  &lt;span class=&quot;nb&quot;&gt;puts&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;Hi, &lt;/span&gt;&lt;span class=&quot;si&quot;&gt;#{&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;name&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;
-&lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
-&lt;span class=&quot;n&quot;&gt;print_hi&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;'Tom'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-&lt;span class=&quot;c1&quot;&gt;#=&amp;gt; prints 'Hi, Tom' to STDOUT.&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
-
-&lt;p&gt;Check out the &lt;a href=&quot;http://jekyllrb.com/docs/home&quot;&gt;Jekyll docs&lt;/a&gt; for more info on how to get the most out of Jekyll. File all bugs/feature requests at &lt;a href=&quot;https://github.com/jekyll/jekyll&quot;&gt;Jekyll’s GitHub repo&lt;/a&gt;. If you have questions, you can ask them on &lt;a href=&quot;https://talk.jekyllrb.com/&quot;&gt;Jekyll Talk&lt;/a&gt;.&lt;/p&gt;
-
-</description>
-        <pubDate>Sun, 28 Jan 2018 21:29:40 +0100</pubDate>
-        <link>https://www.carlhauck.de/jekyll/update/2018/01/28/welcome-to-jekyll.html</link>
-        <guid isPermaLink="true">https://www.carlhauck.de/jekyll/update/2018/01/28/welcome-to-jekyll.html</guid>
+        <link>https://www.carlhauck.de/jekyll/update/2018/01/29/rails-security-part1.html</link>
+        <guid isPermaLink="true">https://www.carlhauck.de/jekyll/update/2018/01/29/rails-security-part1.html</guid>
         
         
         <category>jekyll</category>
