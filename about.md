@@ -14,3 +14,14 @@ This website will be playground and exposé at the same time. If you are interes
 Want to connect?
 Hit me on
 <a target="_blank" href="https://www.linkedin.com/in/carl-hauck-007706142/">LinkedIn</a>, <a target="_blank" href="https://github.com/biocarl">Github</a> or even <a target="_blank" href="https://twitter.com/carl_hauck">Twitter</a>!
+
+
+
+<br><strong>Impressum</strong><br>
+<br>
+Carl Hauck<br>
+Rua Barrinha 525 (Indaiá)<br>
+Belo Horizonte<br>
+Brasilen <br>
+<strong>Note: </strong> No data on this website is collected. The website is strictly for personal use.
+
