@@ -2,7 +2,7 @@
 layout: post
 title: 10 security principles I learned during my internship
 date: 2018-02-22
-categories: security web 
+categories:
 ---
 
 ### 1 - Mind the user input
