@@ -18,3 +18,5 @@ github_username: biocarl
 # Build settings
 markdown: kramdown
 highlighter: pygments
+
+theme: jekyll-theme-cayman
